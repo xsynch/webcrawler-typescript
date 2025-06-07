@@ -1,0 +1,17 @@
+{
+  "name": "webcrawler_typescript",
+  "version": "1.0.0",
+  "description": "bootdev webcrawler using typescript",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsx ./src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}
