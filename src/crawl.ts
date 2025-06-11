@@ -1,3 +1,4 @@
+import { link } from 'fs';
 import {JSDOM } from 'jsdom'
 
 
@@ -35,7 +36,7 @@ export async function getHTML(url: string){
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-    const headers = response.headers;
+    // const headers = response.headers;
     const pageType = response.headers.get('content-type')
     if (!pageType || !pageType.startsWith('text/html')){
         throw new Error(`Content type is not html: ${pageType}`)
@@ -47,4 +48,41 @@ export async function getHTML(url: string){
   } catch (error) {
     return error;
   }
+}
+
+export async function crawlPage(  baseURL: string,  currentURL: string = baseURL,  pages: Record<string, number> = {},){
+    let current = new URL(currentURL);
+    let base = new URL(baseURL)
+    
+    if (current.hostname != base.hostname){
+        return pages;
+    }
+    let normalizedCurrentURL = normalizeURL(currentURL);
+    if (normalizedCurrentURL in pages){
+        pages[normalizedCurrentURL] += 1;
+        return pages;
+    } else {
+        pages[normalizedCurrentURL] = 1;
+    }
+    let currentHTML =  await getHTML(currentURL);
+    console.log(currentURL);
+    if (typeof(currentHTML) === 'string') {
+        const links = getURLsFromHTML(currentHTML,currentURL)
+        
+        for (let l of links){
+            
+            let result = await crawlPage(baseURL,l,pages)
+            // for (const key in result){
+            //     const value = result[key];
+            //     if (key in pages) {
+            //         pages[key] += value;
+            //     } else {
+            //         pages[key] = value;
+            //     }
+            // }
+          
+        }
+    }
+    return pages;
+    
 }
