@@ -1,6 +1,7 @@
 import {expect, test} from 'vitest'
 import { getURLsFromHTML, normalizeURL } from "./crawl";
 
+
 test('strip start from url', () => {
     expect(normalizeURL("https://boot.dev")).toBe("boot.dev")
 })
